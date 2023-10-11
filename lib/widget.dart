@@ -76,11 +76,12 @@ class CustomTextField extends StatelessWidget {
   }
 }
 class CustomButton extends StatelessWidget {
-  const CustomButton({
+   CustomButton({
     super.key,
     required this.text,
-    required this.onTap
+    required this.onTap, required this.buttonKey
   });
+  final GlobalKey buttonKey;
   final String text;
   final GestureTapCallback onTap;
   @override
@@ -91,6 +92,7 @@ class CustomButton extends StatelessWidget {
           child: Directionality(
             textDirection: TextDirection.rtl,
             child: ElevatedButton.icon(
+              key: buttonKey,
               onPressed: onTap,
               style: TextButton.styleFrom(
                 backgroundColor: kPrimaryColor

@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:welcome_repair/constant.dart';
@@ -5,6 +6,11 @@ import 'package:welcome_repair/signin.dart';
 import 'package:welcome_repair/widget.dart';
 
 void main() {
+  SystemChrome.setSystemUIOverlayStyle(
+    const SystemUiOverlayStyle(
+      statusBarColor: Colors.transparent
+    )
+  );
   runApp(const MyApp());
 }
 
@@ -45,7 +51,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-
+  final buttonKey = GlobalKey();
 
   @override
   Widget build(BuildContext context) {
@@ -77,7 +83,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     ),
                     Expanded(
                         child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
                             RichText(
                                 textAlign: TextAlign.center,
@@ -95,12 +101,33 @@ class _MyHomePageState extends State<MyHomePage> {
                                 )
                             ),
                             CustomButton(
-                                text: 'START LEARNING',
-                                onTap: () {
-                                  Navigator.of(context).push(
-                                      MaterialPageRoute(builder: (context) => SigninPage())
-                                  );
-                                }
+                              buttonKey: buttonKey,
+                              text: 'START LEARNING',
+                              onTap: ()async {
+                                RenderBox renderbox = buttonKey.currentContext!.findRenderObject() as RenderBox;
+                                Offset position = renderbox.localToGlobal(Offset.zero);
+                                double x = position.dx;
+                                double y = position.dy;
+
+                                print(x);
+                                print(y);
+
+
+                                GestureBinding.instance.handlePointerEvent(PointerDownEvent(
+                                  position: Offset(x, y),
+                                )); //trigger button up,
+
+                                await Future.delayed(const Duration(milliseconds: 170));
+                                //add delay between up and down button
+
+                                GestureBinding.instance.handlePointerEvent(PointerUpEvent(
+                                  position: Offset(x, y),
+                                )); //trigger button down
+
+                                Navigator.of(context).push(
+                                    MaterialPageRoute(builder: (context) => SigninPage())
+                                );
+                              }
                             )
                           ],
                         )
