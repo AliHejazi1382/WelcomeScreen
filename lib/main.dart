@@ -123,7 +123,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                 GestureBinding.instance.handlePointerEvent(PointerUpEvent(
                                   position: Offset(x, y),
                                 )); //trigger button down
-
+                                if (!context.mounted) return;
                                 Navigator.of(context).push(
                                     MaterialPageRoute(builder: (context) => SigninPage())
                                 );
